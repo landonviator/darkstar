@@ -2182,6 +2182,41 @@
     <ClCompile Include="C:\JUCE\modules\juce_gui_extra\juce_gui_extra.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_dsp\Clipper.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_dsp\SVFilter.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_dsp\WaveShaper.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Dial.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Fader.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Menu.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\NumberBox.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\StyleSheet.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Toggle.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\viatordsp\viator_modules\viator_modules.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData2.cpp"/>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData3.cpp"/>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData4.cpp"/>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData5.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_basics.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_devices.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_formats.cpp"/>
@@ -2197,6 +2232,7 @@
       <AdditionalOptions> /bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
+    <ClCompile Include="..\..\JuceLibraryCode\include_viator_modules.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\PluginProcessor.h"/>
@@ -3044,14 +3080,34 @@
     <ClInclude Include="C:\JUCE\modules\juce_gui_extra\misc\juce_WebBrowserComponent.h"/>
     <ClInclude Include="C:\JUCE\modules\juce_gui_extra\native\juce_mac_CarbonViewWrapperComponent.h"/>
     <ClInclude Include="..\..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.h"/>
-    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_dsp\viator_dsp.h"/>
-    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\viator_gui.h"/>
-    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_utils\viator_utils.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\Common\Common.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_dsp\Clipper.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_dsp\SVFilter.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_dsp\WaveShaper.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Border.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Dial.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Fader.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Label.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Menu.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\NumberBox.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\PushButton.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\StyleSheet.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_gui\Widgets\Toggle.h"/>
+    <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_utils\utils.h"/>
     <ClInclude Include="..\..\..\..\viatordsp\viator_modules\viator_modules.h"/>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\JucePluginDefines.h"/>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Source\Assets\dark_blue.png"/>
+    <None Include="..\..\Source\Assets\landon55-03.png"/>
+    <None Include="..\..\Source\Assets\landon55-04.png"/>
+    <None Include="..\..\Source\Assets\oscilloscope-01.png"/>
+    <None Include="..\..\Source\Assets\pluginBackground.png"/>
+    <None Include="..\..\Source\Assets\pluginBackground2.png"/>
+    <None Include="..\..\Source\Assets\testTexture.png"/>
+    <None Include="..\..\Source\Assets\TEXTURE5.png"/>
     <None Include="C:\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt"/>
     <None Include="C:\JUCE\modules\juce_audio_devices\native\oboe\README.md"/>
     <None Include="C:\JUCE\modules\juce_audio_formats\codecs\flac\Flac Licence.txt"/>

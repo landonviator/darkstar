@@ -5,6 +5,19 @@
               companyEmail="viatordsp@gmail.com" companyWebsite="https://www.patreon.com/ViatorDSP">
   <MAINGROUP id="GWlAvc" name="darkstar">
     <GROUP id="{4E8C82B7-7728-D2A5-EDBA-589BF15E429E}" name="Source">
+      <GROUP id="{90D25BE4-061E-750F-8A23-C707975F30F0}" name="Assets">
+        <FILE id="uADDPt" name="dark_blue.png" compile="0" resource="1" file="Source/Assets/dark_blue.png"/>
+        <FILE id="ADiwsz" name="landon55-03.png" compile="0" resource="1" file="Source/Assets/landon55-03.png"/>
+        <FILE id="fu3u0i" name="landon55-04.png" compile="0" resource="1" file="Source/Assets/landon55-04.png"/>
+        <FILE id="bbpkgp" name="oscilloscope-01.png" compile="0" resource="1"
+              file="Source/Assets/oscilloscope-01.png"/>
+        <FILE id="twgGqp" name="pluginBackground.png" compile="0" resource="1"
+              file="Source/Assets/pluginBackground.png"/>
+        <FILE id="VnqbIw" name="pluginBackground2.png" compile="0" resource="1"
+              file="Source/Assets/pluginBackground2.png"/>
+        <FILE id="nNudbn" name="testTexture.png" compile="0" resource="1" file="Source/Assets/testTexture.png"/>
+        <FILE id="Uje4eQ" name="TEXTURE5.png" compile="0" resource="1" file="Source/Assets/TEXTURE5.png"/>
+      </GROUP>
       <FILE id="gN40Xr" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Unix4I" name="PluginProcessor.h" compile="0" resource="0"

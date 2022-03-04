@@ -15,17 +15,61 @@ DarkstarAudioProcessor::DarkstarAudioProcessor()
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), false)
                       #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+                       .withOutput ("Output", juce::AudioChannelSet::stereo(), false)
                      #endif
-                       )
+                       ),
+treeState(*this, nullptr, "PARAMETER", createParameterLayout())
 #endif
 {
+    treeState.addParameterListener ("od input", this);
+    treeState.addParameterListener ("od tone", this);
+    treeState.addParameterListener ("od level", this);
 }
 
 DarkstarAudioProcessor::~DarkstarAudioProcessor()
 {
+    treeState.removeParameterListener ("od input", this);
+    treeState.removeParameterListener ("od tone", this);
+    treeState.removeParameterListener ("od level", this);
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout DarkstarAudioProcessor::createParameterLayout()
+{
+  std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
+
+  // Make sure to update the number of reservations after adding params
+  params.reserve(3);
+    
+  auto pODInput = std::make_unique<juce::AudioParameterFloat>("od input", "OD Input", 0.0, 10.0, 0.0);
+  auto pODTone = std::make_unique<juce::AudioParameterFloat>("od tone", "OD Tone", -10.0, 10.0, 0.0);
+  auto pODShape = std::make_unique<juce::AudioParameterFloat>("od level", "OD Level", -10.0, 10.0, 0.0);
+    
+  params.push_back(std::move(pODInput));
+  params.push_back(std::move(pODTone));
+  params.push_back(std::move(pODShape));
+  return { params.begin(), params.end() };
+}
+
+void DarkstarAudioProcessor::parameterChanged(const juce::String &parameterID, float newValue)
+{
+    if (parameterID == "od input")
+    {
+        pedalShaper.setParameter(viator_dsp::WaveShaper::ParameterId::kPreamp, newValue);
+    }
+    
+    if (parameterID == "od tone")
+    {
+        /** Map tone knob to go from 500 Hz to 2000 Hz*/
+        auto tone = juce::jmap(newValue, -10.0f, 10.0f, 0.5f, 1.5f);
+        pedalLPFilter.setParameter(viator_dsp::SVFilter::ParameterId::kCutoff, 1000.0 * tone);
+    }
+    
+    if (parameterID == "od level")
+    {
+        pedalLevelModule.setGainDecibels(newValue);
+    }
 }
 
 //==============================================================================
@@ -93,8 +137,24 @@ void DarkstarAudioProcessor::changeProgramName (int index, const juce::String& n
 //==============================================================================
 void DarkstarAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    juce::dsp::ProcessSpec spec;
+    spec.sampleRate = sampleRate;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumInputChannels();
+    
+    pedalLPFilter.prepare(spec);
+    pedalLPFilter.setParameter(viator_dsp::SVFilter::ParameterId::kType, viator_dsp::SVFilter::FilterType::kLowPass);
+    pedalLPFilter.setParameter(viator_dsp::SVFilter::ParameterId::kCutoff, 1000.0);
+    
+    pedalHPFilter.prepare(spec);
+    pedalHPFilter.setParameter(viator_dsp::SVFilter::ParameterId::kType, viator_dsp::SVFilter::FilterType::kHighPass);
+    pedalHPFilter.setParameter(viator_dsp::SVFilter::ParameterId::kCutoff, 300.0);
+    
+    pedalShaper.prepare(spec);
+    pedalShaper.setParameter(viator_dsp::WaveShaper::ParameterId::kPreamp, 0.0);
+    
+    pedalLevelModule.prepare(spec);
+    pedalLevelModule.setGainDecibels(0.0);
 }
 
 void DarkstarAudioProcessor::releaseResources()
@@ -135,27 +195,21 @@ void DarkstarAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    juce::dsp::AudioBlock<float> block (buffer);
+    pedalShaper.process(juce::dsp::ProcessContextReplacing<float>(block));
+    processOverdrivePedal(block);
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
+}
 
-        // ..do something to the data...
-    }
+void DarkstarAudioProcessor::processOverdrivePedal(juce::dsp::AudioBlock<float>& inputBlock)
+{
+    pedalShaper.process(juce::dsp::ProcessContextReplacing<float>(inputBlock));
+    pedalHPFilter.processBlock(inputBlock);
+    pedalHPFilter.processBlock(inputBlock);
+    viator_utils::utils::hardClipBlock(inputBlock);
 }
 
 //==============================================================================
@@ -166,7 +220,8 @@ bool DarkstarAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* DarkstarAudioProcessor::createEditor()
 {
-    return new DarkstarAudioProcessorEditor (*this);
+    //return new DarkstarAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor (*this);
 }
 
 //==============================================================================

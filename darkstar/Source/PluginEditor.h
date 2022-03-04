@@ -28,6 +28,11 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     DarkstarAudioProcessor& audioProcessor;
-
+    
+    juce::Image background;
+    
+    viator_gui::PushButton pedalView, ampView, fxView;
+    
+    viator_gui::Dial dial1;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DarkstarAudioProcessorEditor)
 };
